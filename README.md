@@ -1,6 +1,6 @@
 # pubmed-fetch
 an npm package which acts as a typescript version of Bio.Entrez -- automating PubMed article and manuscript data retrivial.  
-the majority of functions are async promises using `axios` to perform the fetches from pubmed 
+the majority of functions are async promises using [axios](https://github.com/axios/axios) to perform the fetches from pubmed 
 the main purpose of this package is to grab pubmed data to move into a postgresql database, which is why all of it pertains to logging in the console. 
 
 ## installation 
@@ -51,19 +51,7 @@ const ret = getIDsAndData(query, 15, api_key, true);
 ```
 where `15` would the maximum number of returned papers (i think the maximum currently is 10,000), and `true` indicates that you want the results to be logged to the console. 
 
-calling this function will use pubmed's esearch and efetch functions based of your `query`, then the outputted console xml is formatted into an array of PaperData objects, which returns like this: 
-```
-PMID: number;
-title: string;
-slug: string;
-abstract: string;
-authors: string[];
-journal: string;
-pubdate: Date;
-keywords: string[];
-url: string;
-affiliations: string[];
-```
+calling this function will use pubmed's esearch and efetch functions based of your `query`, then the outputted console xml is formatted into an array of PaperData objects.
 
 here is what an example would look like in your console: 
 ```
@@ -97,3 +85,55 @@ here is what an example would look like in your console:
 ]
 ```
 
+## getting a list of PMIDs with `fetchIDs()`
+a function that is called within `getIDsAndData()`, returns a list of PMIDs based off the query utilizing pubmed's `esearch` fetching option.
+here as an example: 
+```index.ts
+const idList = fetchIDs(query, 15, api_key, true)
+```
+where `console.log(idList)` could look something like: 
+```
+<eSearchResult>
+  <IdList>
+    <Id>38390375</Id>
+    <Id>39418647</Id>
+    <Id>39418644</Id>
+    <Id>39418643</Id>
+    <Id>39418642</Id>
+  </IdList>
+</eSearchResult> 
+```
+
+## getting raw xml from idList using `fetchData()`
+a function that is called within `getIDsAndData()`, returns raw xml data from list of PMIDs utilizing pubmed's `efetch` fetching option. unfortunately for the pubmed database, the only data format that can be outputted is xml, so i have used [xml2js](https://www.npmjs.com/package/xml2js) to format it slightly before actually processing it. 
+here is an example: 
+```index.ts
+const rawData = fetchData(idList, api_key, true)
+```
+where `console.log(rawData)` could look something like: 
+```
+{
+  PubmedArticleSet: {
+    PubmedArticle: { MedlineCitation: [Object], PubmedData: [Object] }
+  }
+}
+```
+
+## understanding `processData()`
+this function takes the rawData outputted by `fetchData()` and processes each item into each attribute of the `PaperData` object: 
+```
+PMID: number;
+title: string;
+slug: string;
+abstract: string;
+authors: string[];
+journal: string;
+pubdate: Date;
+keywords: string[];
+url: string;
+affiliations: string[];
+```
+example output can be viewed under `getIDsandData()` output
+
+---
+this is v1.0 of my npm package! i am open to all pull requests, suggestions, or improvements to my code. it is in part of a larger project i am doing for university, so i may not get back in a timely manner as long as the package is working for my current needs. 
