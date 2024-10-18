@@ -153,4 +153,7 @@ example output can be viewed under [`getIDsandData()`](#obtaining-fully-formatte
 <br>
 
 ---
-this is v1.0 of my npm package! i am open to all pull requests, suggestions, or improvements to my code. it is in part of a larger project i am doing for university, so i may not get back in a timely manner as long as the package is working for my current needs. 
+#### `v1.0` of pubmed-fetch!  
+i am open to all pull requests, suggestions, or improvements to my code. it is in part of a larger project i am doing for university, so i may not get back in a timely manner as long as the package is working for my current needs.  
+<br> 
+thank you for your support :) -- rebecca
