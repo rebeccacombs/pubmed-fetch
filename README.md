@@ -27,6 +27,7 @@ const api_key = process.env.NCBI_API_KEY
 NCBI_API_KEY = "your_api_key"
 ```
 NOTE: currently an NCBI API key is *needed* for the functions to work  
+- if you are having issues with environment variables in your project, consider installing [dotenv](https://github.com/motdotla/dotenv#readme) npm package. 
 
 <br>
 
