@@ -1,6 +1,7 @@
 # pubmed-fetch
 an npm package which acts as a typescript version of [Bio.Entrez](https://biopython.org/docs/1.76/api/Bio.Entrez.html) -- automating PubMed article and manuscript data retrivial.  
-the majority of functions are asynchronous, using [axios](https://github.com/axios/axios) to perform the fetches from pubmed 
+the majority of functions are asynchronous, using [axios](https://github.com/axios/axios) to perform the fetches from pubmed.   
+
 the main purpose of this package is to grab pubmed data to move into a database, which is why all of it pertains to logging in the console. 
 
 all functions can be found in [`src/index.ts`](https://github.com/rebeccacombs/pubmed-fetch/blob/master/src/index.ts).
