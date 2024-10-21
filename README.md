@@ -4,9 +4,10 @@ the majority of functions are asynchronous, using [axios](https://github.com/axi
 
 the main purpose of this package is to grab pubmed data to move into a database, which is why all of it pertains to logging in the console. 
 
-all functions can be found in [`src/index.ts`](https://github.com/rebeccacombs/pubmed-fetch/blob/master/src/index.ts).
-<br>
-<br> 
+all functions can be found in [`src/index.ts`](https://github.com/rebeccacombs/pubmed-fetch/blob/master/src/index.ts).  
+- [github](https://github.com/rebeccacombs/pubmed-fetch/)
+- [npm](https://www.npmjs.com/package/pubmed-fetch)
+
 
 
 ## installation 
