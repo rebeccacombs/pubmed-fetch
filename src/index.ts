@@ -3,11 +3,13 @@ import xml2js from 'xml2js';
 
 const BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 
+//npx ts-node src/index
+
 /*
-const api_key = process.env.NCBI_API_KEY
+const api_key = process.env.NCBI_API_KEY;
 const authors = ['']
 const topics = ['RNAi', "siRNA", "ASO", "mRNA"]
-const dateRange = '("2024/09/19"[Date - Create] : "2024/10/15"[Date - Create])'
+const dateRange = '("2017/09/19"[Date - Create] : "2018/10/15"[Date - Create])'
 const query = buildQuery(authors, topics, dateRange)
 const ret = getIDsAndData(query, 15, api_key, true);
 console.log(ret)
@@ -59,6 +61,7 @@ export async function fetchIDs(query: string, num: number, api_key: string | und
         } catch (error) {
             console.error(`Error searching IDs, attempt ${attempt + 1}/3. Trying again.`);
             await delay(1000 * Math.pow(2, attempt)); // Exponential backoff
+            console.error(error)
         }
     }
     return idList;
