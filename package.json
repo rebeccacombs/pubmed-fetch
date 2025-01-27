@@ -1,6 +1,6 @@
 {
   "name": "pubmed-fetch",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Typescript version of Bio.Entrez; automating PubMed article and manuscript data retrivial.  ",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

@@ -5,15 +5,15 @@ const BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 
 //run: npx ts-node src/index
 
-
-const api_key = "d14bf3b58c42a07e3aa27c999970e59e5d08"
+/*
+const api_key = process.env.NCBI_API_KEY
 const authors = ['']
 const topics = ['RNAi', "siRNA", "ASO", "mRNA"]
 const dateRange = '("2017/09/19"[Date - Create] : "2018/10/15"[Date - Create])'
 const query = buildQuery(authors, topics, dateRange)
 const ret = getIDsAndData(query, 120, api_key, true);
 console.log(ret)
-
+*/
 
 // paper data object
 type PaperData = {
