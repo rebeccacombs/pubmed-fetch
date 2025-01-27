@@ -3,17 +3,17 @@ import xml2js from 'xml2js';
 
 const BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 
-//npx ts-node src/index
+//run: npx ts-node src/index
 
-/*
-const api_key = process.env.NCBI_API_KEY;
+
+const api_key = "d14bf3b58c42a07e3aa27c999970e59e5d08"
 const authors = ['']
 const topics = ['RNAi', "siRNA", "ASO", "mRNA"]
 const dateRange = '("2017/09/19"[Date - Create] : "2018/10/15"[Date - Create])'
 const query = buildQuery(authors, topics, dateRange)
-const ret = getIDsAndData(query, 15, api_key, true);
+const ret = getIDsAndData(query, 120, api_key, true);
 console.log(ret)
-*/
+
 
 // paper data object
 type PaperData = {
@@ -101,7 +101,7 @@ export async function processData(data: any): Promise<Array<PaperData>> {
                     affiliations: dataTools.getAffiliations(article.MedlineCitation.Article.AuthorList.Author)
                 };
             } catch (articleError) {
-                console.error("Error processing article:", article.MedlineCitation.PMID._, article.MedlineCitation.Article.AuthorList.Author[0].LastName._, articleError);
+                console.error("Error processing article:", article.MedlineCitation.PMID._, article.MedlineCitation.Article.AuthorList.Author[0], articleError);
                 return null;  // skip or return a fallback structure
             }
         }).filter((article: any) => article !== null);  // remove any null articles
@@ -109,6 +109,7 @@ export async function processData(data: any): Promise<Array<PaperData>> {
 
     } catch (error) {
         console.error("Error processing data:", error);
+        
         return [];  // return empty array in case of failure
     }
 }
@@ -130,20 +131,35 @@ const dataTools = {
         })
         return text.join(" ")
     },
-    getAuthors(entry: any): string[] { //entry = data.PubmedArticleSet.PubmedArticle[IDX].MedlineCitation.Article.AuthorList.Author
-        const authors = entry.map((author: { LastName: { _: string; }; ForeName: { _: string; }; }) => {
+    getAuthors(entry: any): string[] { 
+        const authors = entry.map((author: { CollectiveName?: { _: string; }; LastName?: { _: string; }; ForeName?: { _: string; }; }) => {
             try {
+    
+                // Handle CollectiveName case
+                if (author?.CollectiveName) {
+                    return author?.CollectiveName._.trim();
+                }
+    
                 const lastName = author?.LastName?._.trim() || '';
                 const foreName = author?.ForeName?._.trim() || '';
 
                 if (lastName && foreName) {
                     return `${lastName} ${foreName}`;
                 }
+                else if (lastName) {
+                    return lastName;  // Only return last name if fore name is missing
+                } 
+                else if (foreName) {
+                    return foreName;  // Only return fore name if last name is missing
+                }
+                
             } catch (authorError) {
                 console.error("Error processing author:", author, authorError);
             }
-        }).filter((name: string) => name);
-        return authors
+            return null;  // Return null if author could not be processed
+        }).filter((name: string | null) => name !== null);  // Filter out null names
+        
+        return authors;
     },
     getDate(entry: any): string { //entry = data.PubmedArticleSet.PubmedArticle[IDX].MedlineCitation.Article.Journal.JournalIssue.PubDate
         if (entry.Year && entry.Year._) {
