@@ -9,7 +9,7 @@ const BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 const api_key = process.env.NCBI_API_KEY
 const authors = ['']
 const topics = ['RNAi', "siRNA", "ASO", "mRNA"]
-const dateRange = '("2017/09/19"[Date - Create] : "2018/10/15"[Date - Create])'
+const dateRange = '("2018/10/15"[Date - Create] : "2020/12/30"[Date - Create])';
 const query = buildQuery(authors, topics, dateRange)
 const ret = getIDsAndData(query, 120, api_key, true);
 console.log(ret)
@@ -88,20 +88,21 @@ export async function processData(data: any): Promise<Array<PaperData>> {
     try {
         const pData = data.PubmedArticleSet.PubmedArticle.map((article: any) => {
             try {
+                const authorList = article.MedlineCitation.Article.AuthorList?.Author;
                 return {
                     PMID: dataTools.getPMID(article.MedlineCitation.PMID._),
                     title: article.MedlineCitation.Article.ArticleTitle._,
                     slug: dataTools.getSlug(article.MedlineCitation.Article.ArticleTitle._),
                     abstract: article.MedlineCitation.Article.Abstract.AbstractText._ || dataTools.getAbstractText(article.MedlineCitation.Article.Abstract.AbstractText),
-                    authors: dataTools.getAuthors(article.MedlineCitation.Article.AuthorList.Author),
+                    authors: authorList ? dataTools.getAuthors(authorList) : [],
                     journal: article.MedlineCitation.Article.Journal.Title._,
                     pubdate: new Date(dataTools.getDate(article.MedlineCitation.Article.Journal.JournalIssue.PubDate)),
                     keywords: dataTools.getKeywords(article.MedlineCitation),
                     url: `https://www.ncbi.nlm.nih.gov/pubmed/${article.MedlineCitation.PMID._}`,
-                    affiliations: dataTools.getAffiliations(article.MedlineCitation.Article.AuthorList.Author)
+                    affiliations: authorList ? dataTools.getAffiliations(authorList) : []
                 };
             } catch (articleError) {
-                console.error("Error processing article:", article.MedlineCitation.PMID._, article.MedlineCitation.Article.AuthorList.Author[0], articleError);
+                console.error("Error processing article:", article.MedlineCitation.PMID._, article.MedlineCitation.Article.AuthorList.Author, articleError);
                 return null;  // skip or return a fallback structure
             }
         }).filter((article: any) => article !== null);  // remove any null articles

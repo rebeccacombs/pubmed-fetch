@@ -1,6 +1,6 @@
 {
-  "name": "pubmed-fetch",
-  "version": "1.0.6",
+  "name": "@rebeccacombs/pubmed-fetch",
+  "version": "1.0.8",
   "description": "Typescript version of Bio.Entrez; automating PubMed article and manuscript data retrivial.  ",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -40,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rebeccacombs/pubmed-fetch.git"
+    "url": "git+https://github.com/rebeccacombs/pubmed-fetch.git"
   }, 
   "publishConfig": {
   "registry": "https://npm.pkg.github.com"
