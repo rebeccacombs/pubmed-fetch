@@ -15,7 +15,6 @@ const ret = getIDsAndData(query, 120, api_key, true);
 console.log(ret)
 */
 
-// paper data object
 type PaperData = {
     PMID: number;
     title: string;
@@ -136,7 +135,6 @@ const dataTools = {
         const authors = entry.map((author: { CollectiveName?: { _: string; }; LastName?: { _: string; }; ForeName?: { _: string; }; }) => {
             try {
     
-                // Handle CollectiveName case
                 if (author?.CollectiveName) {
                     return author?.CollectiveName._.trim();
                 }
@@ -148,17 +146,17 @@ const dataTools = {
                     return `${lastName} ${foreName}`;
                 }
                 else if (lastName) {
-                    return lastName;  // Only return last name if fore name is missing
+                    return lastName;  
                 } 
                 else if (foreName) {
-                    return foreName;  // Only return fore name if last name is missing
+                    return foreName;  
                 }
                 
             } catch (authorError) {
                 console.error("Error processing author:", author, authorError);
             }
-            return null;  // Return null if author could not be processed
-        }).filter((name: string | null) => name !== null);  // Filter out null names
+            return null;  
+        }).filter((name: string | null) => name !== null);  
         
         return authors;
     },
